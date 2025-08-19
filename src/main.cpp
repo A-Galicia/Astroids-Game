@@ -1,10 +1,20 @@
 #include <SFML/Graphics.hpp>
+#include "Player.hpp"
  
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(200, 200), "SFML Works");
+	// initilization
+	
+	sf::RenderWindow window(sf::VideoMode({1920, 1080}), "Astroids");
+	window.setFramerateLimit(60);
 	sf::CircleShape shape(100.0f);
 	shape.setFillColor(sf::Color::Green);
+	Player player;
+	player.Initilize();
+	player.Load();
+	
+
+	// Main Game Loop ---------------------------------------------
 
 	while (window.isOpen())
 	{
@@ -16,8 +26,17 @@ int main()
 				window.close();
 			}
 
+			// Update -----------------------------------------------
+			
+			player.Update();
+
+			// Update -----------------------------------------------
+			
+			// Draw -------------------------------------------------
+
 			window.clear();
-			window.draw(shape);
+			//window.draw(shape);
+			player.Draw(window);
 			window.display();
 		}
 	}
