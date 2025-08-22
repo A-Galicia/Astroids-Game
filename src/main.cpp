@@ -28,7 +28,8 @@ int main()
 
 			// Update -----------------------------------------------
 			
-			player.Update();
+			sf::Vector2f mousePosition = sf::Vector2f(sf::Mouse::getPosition(window));
+			player.Update(mousePosition);
 
 			// Update -----------------------------------------------
 			
