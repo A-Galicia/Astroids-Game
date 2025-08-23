@@ -22,7 +22,8 @@ void Bullet::Initilize(const sf::Vector2f &origin, const sf::Vector2f &mousePosi
 	bulletShape.setRadius(5);
 	bulletShape.setPosition(origin);
 	bulletShape.setFillColor(sf::Color::Red);
-	direction = NormalizeVector(mousePosition - origin);
+	//direction = NormalizeVector(mousePosition - origin);
+	direction = mousePosition;
 }
 
 void Bullet::Update(double deltaTime){
@@ -67,6 +68,9 @@ void Player::Load() {
 
 void Player::Update(sf::Vector2f &mousePosition, double deltaTime) {
 	// handle movement
+	
+	float ang = (sprite.getRotation() - 90.f) * (3.1415f / 180.0f);
+	sf::Vector2f forward(std::cos(ang), std::sin(ang));
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
 		sprite.rotate(-rotSpeed * (float)deltaTime);
@@ -74,11 +78,7 @@ void Player::Update(sf::Vector2f &mousePosition, double deltaTime) {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
 		sprite.rotate(rotSpeed * (float)deltaTime);
 	}
-	
-	
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
-		float ang = (sprite.getRotation() - 90.f) * (3.1415f / 180.0f);
-		sf::Vector2f forward(std::cos(ang), std::sin(ang));
 		velocity += forward * (thrust * (float)deltaTime);
 	}
 	
@@ -90,10 +90,11 @@ void Player::Update(sf::Vector2f &mousePosition, double deltaTime) {
 	boundingCircle.setPosition(pos.x, pos.y);
 	fireRateTimer += deltaTime;
 
-	if(sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && fireRateTimer >= maxFireRate) {
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && fireRateTimer >= maxFireRate) {
 		
 		bullets.emplace_back();
-		bullets.back().Initilize(sprite.getPosition(), mousePosition);
+		bullets.back().Initilize(sprite.getPosition(), forward);
+		//bullets.back().Initilize(forward);
 		fireRateTimer = 0;
 	}
 
@@ -104,7 +105,6 @@ void Player::Update(sf::Vector2f &mousePosition, double deltaTime) {
 
 void Player::Draw(sf::RenderWindow &window) {
 	window.draw(sprite);
-	//window.draw(boundingRect);
 	window.draw(boundingCircle);
 
 	while (!bullets.empty() && bullets.front().timeToLive <= 0.f){
