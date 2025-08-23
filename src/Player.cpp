@@ -43,6 +43,7 @@ Player::Player() {
 	rotSpeed = 0.3f;
 	thrust = 0.007f;
 	damping = 0.005f;
+	maxSpeed = 0.7f;
 }
 
 void Player::Initilize() {
@@ -58,7 +59,8 @@ void Player::Load() {
 		sprite.setTexture(texture);
 		sprite.setPosition({960, 540});
 		sprite.scale(sf::Vector2f(0.2, 0.2));	 	
-		sprite.setOrigin(245, 250);
+		auto spriteBounds = sprite.getLocalBounds();
+		sprite.setOrigin(spriteBounds.width * 0.5f, spriteBounds.height * 0.5f);
 		velocity = {0.f, 0.f};
 	}
 	else {
@@ -83,18 +85,23 @@ void Player::Update(sf::Vector2f &mousePosition, double deltaTime) {
 	}
 	
 	velocity -= velocity * (damping * (float)deltaTime);
+	const float speedSqr = velocity.x * velocity.x + velocity.y * velocity.y;
+	const float maxSqr = maxSpeed * maxSpeed;
+
+	if (speedSqr > maxSqr) {
+		const float invSpeed = 1.0f / std::sqrt(speedSqr);
+		velocity *= maxSpeed * invSpeed;
+	}
+
 	sprite.move(velocity * (float)deltaTime);
 
-	sf::Vector2f pos = sprite.getPosition();
-
-	boundingCircle.setPosition(pos.x, pos.y);
+	boundingCircle.setPosition(sprite.getPosition());
 	fireRateTimer += deltaTime;
 
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && fireRateTimer >= maxFireRate) {
 		
 		bullets.emplace_back();
 		bullets.back().Initilize(sprite.getPosition(), forward);
-		//bullets.back().Initilize(forward);
 		fireRateTimer = 0;
 	}
 

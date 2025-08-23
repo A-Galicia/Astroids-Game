@@ -29,6 +29,7 @@ private:
 	float rotSpeed;
 	float thrust;
 	float damping;
+	float maxSpeed;
 	
 public:
 	sf::Sprite sprite;
