@@ -19,13 +19,18 @@ class Player
 {
 private:
 	sf::Texture texture;
-	sf::RectangleShape boundingRect;
 	sf::CircleShape boundingCircle;
 	float movementSpeed;
 	int health;
 	std::deque<Bullet> bullets;
 	float maxFireRate;
 	double fireRateTimer;
+	sf::Vector2f front;
+	sf::Vector2f back;
+	sf::Vector2f velocity;
+	float rotSpeed;
+	float thrust;
+	float damping;
 	
 public:
 	sf::Sprite sprite;

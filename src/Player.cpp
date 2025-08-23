@@ -39,15 +39,12 @@ Player::Player() {
 	movementSpeed = .1;
 	maxFireRate = 500;
 	fireRateTimer = 0;
+	rotSpeed = 0.3f;
+	thrust = 0.007f;
+	damping = 0.005f;
 }
 
 void Player::Initilize() {
-	/*
-	boundingRect.setFillColor(sf::Color::Transparent);
-	boundingRect.setOutlineColor(sf::Color::Red);
-	boundingRect.setOutlineThickness(1.0);
-	boundingRect.setSize(sf::Vector2f(95, 120));
-	*/
 	boundingCircle.setFillColor(sf::Color::Transparent);
 	boundingCircle.setOutlineColor(sf::Color::Red);
 	boundingCircle.setOutlineThickness(1.0);
@@ -58,9 +55,10 @@ void Player::Initilize() {
 void Player::Load() {
 	if (texture.loadFromFile("assets/CartoonShip.png")) {
 		sprite.setTexture(texture);
-		sprite.setPosition({50, 50});
+		sprite.setPosition({960, 540});
 		sprite.scale(sf::Vector2f(0.2, 0.2));	 	
 		sprite.setOrigin(245, 250);
+		velocity = {0.f, 0.f};
 	}
 	else {
 		std::cout << "Player Failed to load" << std::endl;
@@ -69,29 +67,31 @@ void Player::Load() {
 
 void Player::Update(sf::Vector2f &mousePosition, double deltaTime) {
 	// handle movement
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
-		sprite.move({0, -1.0f * movementSpeed * (float)deltaTime});
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S))
-		sprite.move({0, 1.0f * movementSpeed * (float)deltaTime});
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
+		sprite.rotate(-rotSpeed * (float)deltaTime);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
+		sprite.rotate(rotSpeed * (float)deltaTime);
+	}
+	
+	
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
+		float ang = (sprite.getRotation() - 90.f) * (3.1415f / 180.0f);
+		sf::Vector2f forward(std::cos(ang), std::sin(ang));
+		velocity += forward * (thrust * (float)deltaTime);
+	}
+	
+	velocity -= velocity * (damping * (float)deltaTime);
+	sprite.move(velocity * (float)deltaTime);
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
-		sprite.move({-1.0f * movementSpeed * (float)deltaTime, 0});
+	sf::Vector2f pos = sprite.getPosition();
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
-		sprite.move({1.0f * movementSpeed * (float)deltaTime, 0});
-
-	//boundingRect.setPosition(sprite.getPosition());
-	boundingCircle.setPosition(sprite.getPosition());
+	boundingCircle.setPosition(pos.x, pos.y);
 	fireRateTimer += deltaTime;
-	//std::cout << fireRateTimer << std::endl;
 
 	if(sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && fireRateTimer >= maxFireRate) {
-		/*bullets.push_back(Bullet());
-		int i = bullets.size() - 1;
-		bullets[i].Initilize(sprite.getPosition(), mousePosition);
-
-		fireRateTimer = 0;*/
+		
 		bullets.emplace_back();
 		bullets.back().Initilize(sprite.getPosition(), mousePosition);
 		fireRateTimer = 0;
