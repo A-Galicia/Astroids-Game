@@ -13,11 +13,10 @@ sf::Vector2f NormalizeVector(sf::Vector2f vector) {
 
 Bullet::Bullet()
 {
-	speed = 4.0f;
+	speed = 1.0f;
 	bulletShape = sf::CircleShape (10.0f);
+	timeToLive = 1000; // miliseconds -> 1 seconds
 }
-
-Bullet::~Bullet(){}
 
 void Bullet::Initilize(const sf::Vector2f &origin, const sf::Vector2f &mousePosition){
 	bulletShape.setRadius(5);
@@ -28,6 +27,7 @@ void Bullet::Initilize(const sf::Vector2f &origin, const sf::Vector2f &mousePosi
 
 void Bullet::Update(double deltaTime){
 	bulletShape.setPosition(bulletShape.getPosition() + direction * (speed * (float)deltaTime));
+	timeToLive -= deltaTime;
 }
 
 void Bullet::Draw(sf::RenderWindow& window){
@@ -35,7 +35,10 @@ void Bullet::Draw(sf::RenderWindow& window){
 }
 
 Player::Player() {
-	int health = 0;
+	health = 5;
+	movementSpeed = .1;
+	maxFireRate = 500;
+	fireRateTimer = 0;
 }
 
 void Player::Initilize() {
@@ -71,11 +74,18 @@ void Player::Update(sf::Vector2f &mousePosition, double deltaTime) {
 		sprite.move({1.0f * movementSpeed * (float)deltaTime, 0});
 
 	boundingRect.setPosition(sprite.getPosition());
+	fireRateTimer += deltaTime;
+	std::cout << fireRateTimer << std::endl;
 
-	if(sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
-		bullets.push_back(Bullet());
+	if(sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && fireRateTimer >= maxFireRate) {
+		/*bullets.push_back(Bullet());
 		int i = bullets.size() - 1;
 		bullets[i].Initilize(sprite.getPosition(), mousePosition);
+
+		fireRateTimer = 0;*/
+		bullets.emplace_back();
+		bullets.back().Initilize(sprite.getPosition(), mousePosition);
+		fireRateTimer = 0;
 	}
 
 	for (size_t i = 0; i < bullets.size(); i++){
@@ -86,6 +96,10 @@ void Player::Update(sf::Vector2f &mousePosition, double deltaTime) {
 void Player::Draw(sf::RenderWindow &window) {
 	window.draw(sprite);
 	window.draw(boundingRect);
+
+	while (!bullets.empty() && bullets.front().timeToLive <= 0.f){
+		bullets.pop_front();
+	}	
 
 	for (int i = 0; i < bullets.size(); i++){
 		bullets[i].Draw(window);

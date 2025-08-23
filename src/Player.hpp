@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <deque>
 
 class Bullet {
 	sf::CircleShape bulletShape;
@@ -7,8 +8,8 @@ class Bullet {
 	float speed;
 
 public:
+	float timeToLive;
 	Bullet();
-	~Bullet();
 	void Initilize(const sf::Vector2f &origin, const sf::Vector2f &mousePosition);
 	void Update(double deltaTime);
 	void Draw(sf::RenderWindow& window);
@@ -19,8 +20,11 @@ class Player
 private:
 	sf::Texture texture;
 	sf::RectangleShape boundingRect;
-	int movementSpeed = 1;
-	std::vector<Bullet> bullets;
+	float movementSpeed;
+	int health;
+	std::deque<Bullet> bullets;
+	float maxFireRate;
+	double fireRateTimer;
 	
 public:
 	sf::Sprite sprite;
