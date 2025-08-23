@@ -20,6 +20,7 @@ class Player
 private:
 	sf::Texture texture;
 	sf::RectangleShape boundingRect;
+	sf::CircleShape boundingCircle;
 	float movementSpeed;
 	int health;
 	std::deque<Bullet> bullets;

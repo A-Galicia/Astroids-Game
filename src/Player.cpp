@@ -14,8 +14,8 @@ sf::Vector2f NormalizeVector(sf::Vector2f vector) {
 Bullet::Bullet()
 {
 	speed = 1.0f;
-	bulletShape = sf::CircleShape (10.0f);
-	timeToLive = 1000; // miliseconds -> 1 seconds
+	//bulletShape = sf::CircleShape (10.0f);
+	timeToLive = 2000; // miliseconds -> 2 seconds
 }
 
 void Bullet::Initilize(const sf::Vector2f &origin, const sf::Vector2f &mousePosition){
@@ -42,10 +42,17 @@ Player::Player() {
 }
 
 void Player::Initilize() {
+	/*
 	boundingRect.setFillColor(sf::Color::Transparent);
 	boundingRect.setOutlineColor(sf::Color::Red);
 	boundingRect.setOutlineThickness(1.0);
-	boundingRect.setSize(sf::Vector2f(100, 128));
+	boundingRect.setSize(sf::Vector2f(95, 120));
+	*/
+	boundingCircle.setFillColor(sf::Color::Transparent);
+	boundingCircle.setOutlineColor(sf::Color::Red);
+	boundingCircle.setOutlineThickness(1.0);
+	boundingCircle.setRadius(45);
+	boundingCircle.setOrigin(45, 45);
 }
 
 void Player::Load() {
@@ -53,6 +60,7 @@ void Player::Load() {
 		sprite.setTexture(texture);
 		sprite.setPosition({50, 50});
 		sprite.scale(sf::Vector2f(0.2, 0.2));	 	
+		sprite.setOrigin(245, 250);
 	}
 	else {
 		std::cout << "Player Failed to load" << std::endl;
@@ -73,9 +81,10 @@ void Player::Update(sf::Vector2f &mousePosition, double deltaTime) {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
 		sprite.move({1.0f * movementSpeed * (float)deltaTime, 0});
 
-	boundingRect.setPosition(sprite.getPosition());
+	//boundingRect.setPosition(sprite.getPosition());
+	boundingCircle.setPosition(sprite.getPosition());
 	fireRateTimer += deltaTime;
-	std::cout << fireRateTimer << std::endl;
+	//std::cout << fireRateTimer << std::endl;
 
 	if(sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && fireRateTimer >= maxFireRate) {
 		/*bullets.push_back(Bullet());
@@ -95,7 +104,8 @@ void Player::Update(sf::Vector2f &mousePosition, double deltaTime) {
 
 void Player::Draw(sf::RenderWindow &window) {
 	window.draw(sprite);
-	window.draw(boundingRect);
+	//window.draw(boundingRect);
+	window.draw(boundingCircle);
 
 	while (!bullets.empty() && bullets.front().timeToLive <= 0.f){
 		bullets.pop_front();
