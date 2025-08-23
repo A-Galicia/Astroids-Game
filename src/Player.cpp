@@ -1,6 +1,7 @@
 #include "Player.hpp"
 #include <iostream>
 #include <cmath>
+#include <algorithm>
 
 sf::Vector2f NormalizeVector(sf::Vector2f vector) {
 	float m = std::sqrt(vector.x * vector.x + vector.y * vector.y);
@@ -14,15 +15,13 @@ sf::Vector2f NormalizeVector(sf::Vector2f vector) {
 Bullet::Bullet()
 {
 	speed = 1.0f;
-	//bulletShape = sf::CircleShape (10.0f);
 	timeToLive = 2000; // miliseconds -> 2 seconds
 }
 
 void Bullet::Initilize(const sf::Vector2f &origin, const sf::Vector2f &mousePosition){
-	bulletShape.setRadius(5);
+	bulletShape.setRadius(3);
 	bulletShape.setPosition(origin);
-	bulletShape.setFillColor(sf::Color::Red);
-	//direction = NormalizeVector(mousePosition - origin);
+	bulletShape.setFillColor(sf::Color::White);
 	direction = mousePosition;
 }
 
@@ -41,24 +40,24 @@ Player::Player() {
 	maxFireRate = 500;
 	fireRateTimer = 0;
 	rotSpeed = 0.3f;
-	thrust = 0.007f;
-	damping = 0.005f;
-	maxSpeed = 0.7f;
+	thrust = 0.004f;
+	damping = 0.001f;
+	maxSpeed = 0.5f;
 }
 
 void Player::Initilize() {
 	boundingCircle.setFillColor(sf::Color::Transparent);
 	boundingCircle.setOutlineColor(sf::Color::Red);
 	boundingCircle.setOutlineThickness(1.0);
-	boundingCircle.setRadius(45);
-	boundingCircle.setOrigin(45, 45);
+	boundingCircle.setRadius(22);
+	boundingCircle.setOrigin(22, 22);
 }
 
 void Player::Load() {
 	if (texture.loadFromFile("assets/CartoonShip.png")) {
 		sprite.setTexture(texture);
 		sprite.setPosition({960, 540});
-		sprite.scale(sf::Vector2f(0.2, 0.2));	 	
+		sprite.scale(sf::Vector2f(0.1, 0.1));	 	
 		auto spriteBounds = sprite.getLocalBounds();
 		sprite.setOrigin(spriteBounds.width * 0.5f, spriteBounds.height * 0.5f);
 		velocity = {0.f, 0.f};
@@ -67,8 +66,26 @@ void Player::Load() {
 		std::cout << "Player Failed to load" << std::endl;
 	}
 }
+void Player::KeepInsideWindow(const sf::RenderWindow &window){
+	const float r = boundingCircle.getRadius();
+	sf::Vector2f pos = sprite.getPosition();
+	const sf::Vector2u ws = window.getSize();
 
-void Player::Update(sf::Vector2f &mousePosition, double deltaTime) {
+	const float minX = r;
+	const float maxX = static_cast<float>(ws.x) - r;
+	const float minY = r;
+	const float maxY = static_cast<float>(ws.y) - r;
+
+	const float clampedX = std::clamp(pos.x, minX, maxX);
+	const float clampedY = std::clamp(pos.y, minY, maxY);
+
+	if (clampedX != pos.x) velocity.x = 0.f;
+	if (clampedY != pos.y) velocity.y = 0.f;
+
+	sprite.setPosition(clampedX, clampedY);
+}
+
+void Player::Update(sf::Vector2f &mousePosition, double deltaTime, sf::RenderWindow &window) {
 	// handle movement
 	
 	float ang = (sprite.getRotation() - 90.f) * (3.1415f / 180.0f);
@@ -94,6 +111,7 @@ void Player::Update(sf::Vector2f &mousePosition, double deltaTime) {
 	}
 
 	sprite.move(velocity * (float)deltaTime);
+	KeepInsideWindow(window);
 
 	boundingCircle.setPosition(sprite.getPosition());
 	fireRateTimer += deltaTime;

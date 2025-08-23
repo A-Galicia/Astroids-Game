@@ -40,7 +40,7 @@ int main()
 			// std::cout << (1000 / deltaTime) << std::endl;
 			
 			sf::Vector2f mousePosition = sf::Vector2f(sf::Mouse::getPosition(window));
-			player.Update(mousePosition, deltaTime);
+			player.Update(mousePosition, deltaTime, window);
 
 			// Update -----------------------------------------------
 			
@@ -53,5 +53,4 @@ int main()
 	}
 
 	return 0;
-
 }

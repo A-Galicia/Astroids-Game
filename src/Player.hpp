@@ -36,7 +36,8 @@ public:
 	Player();
 	void Initilize();
 	void Load();
-	void Update(sf::Vector2f &mousePosition, double deltaTime);
+	void Update(sf::Vector2f &mousePosition, double deltaTime, sf::RenderWindow &window);
+	void KeepInsideWindow(const sf::RenderWindow &window);
 	void Draw(sf::RenderWindow &window);
 };
 
