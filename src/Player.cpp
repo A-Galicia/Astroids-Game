@@ -13,7 +13,7 @@ sf::Vector2f NormalizeVector(sf::Vector2f vector) {
 
 Bullet::Bullet()
 {
-	speed = 10.0f;
+	speed = 4.0f;
 	bulletShape = sf::CircleShape (10.0f);
 }
 
@@ -26,8 +26,8 @@ void Bullet::Initilize(const sf::Vector2f &origin, const sf::Vector2f &mousePosi
 	direction = NormalizeVector(mousePosition - origin);
 }
 
-void Bullet::Update(){
-	bulletShape.setPosition(bulletShape.getPosition() + direction * speed);
+void Bullet::Update(double deltaTime){
+	bulletShape.setPosition(bulletShape.getPosition() + direction * (speed * (float)deltaTime));
 }
 
 void Bullet::Draw(sf::RenderWindow& window){
@@ -56,19 +56,19 @@ void Player::Load() {
 	}
 }
 
-void Player::Update(sf::Vector2f &mousePosition) {
+void Player::Update(sf::Vector2f &mousePosition, double deltaTime) {
 	// handle movement
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
-		sprite.move({0, -1.0f * movementSpeed});
+		sprite.move({0, -1.0f * movementSpeed * (float)deltaTime});
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S))
-		sprite.move({0, 1.0f * movementSpeed});
+		sprite.move({0, 1.0f * movementSpeed * (float)deltaTime});
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
-		sprite.move({-1.0f * movementSpeed, 0});
+		sprite.move({-1.0f * movementSpeed * (float)deltaTime, 0});
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
-		sprite.move({1.0f * movementSpeed, 0});
+		sprite.move({1.0f * movementSpeed * (float)deltaTime, 0});
 
 	boundingRect.setPosition(sprite.getPosition());
 
@@ -79,7 +79,7 @@ void Player::Update(sf::Vector2f &mousePosition) {
 	}
 
 	for (size_t i = 0; i < bullets.size(); i++){
-		bullets[i].Update();
+		bullets[i].Update(deltaTime);
 	}
 }
 

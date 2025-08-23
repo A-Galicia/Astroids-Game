@@ -10,7 +10,7 @@ public:
 	Bullet();
 	~Bullet();
 	void Initilize(const sf::Vector2f &origin, const sf::Vector2f &mousePosition);
-	void Update();
+	void Update(double deltaTime);
 	void Draw(sf::RenderWindow& window);
 };
 
@@ -19,7 +19,7 @@ class Player
 private:
 	sf::Texture texture;
 	sf::RectangleShape boundingRect;
-	int movementSpeed = 10;
+	int movementSpeed = 1;
 	std::vector<Bullet> bullets;
 	
 public:
@@ -27,7 +27,7 @@ public:
 	Player();
 	void Initilize();
 	void Load();
-	void Update(sf::Vector2f &mousePosition);
+	void Update(sf::Vector2f &mousePosition, double deltaTime);
 	void Draw(sf::RenderWindow &window);
 };
 
