@@ -8,6 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(SOURCES
     src/main.cpp
     src/Player.cpp
+    src/Astroid.cpp
 )
 
 # Find SFML

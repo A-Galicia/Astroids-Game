@@ -40,7 +40,7 @@ Player::Player() {
 	maxFireRate = 500;
 	fireRateTimer = 0;
 	rotSpeed = 0.3f;
-	thrust = 0.004f;
+	thrust = 0.003f;
 	damping = 0.001f;
 	maxSpeed = 0.5f;
 }
