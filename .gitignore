@@ -44,3 +44,7 @@
 ./build
 /build
 build
+
+#editor settings
+.vscode
+.swp

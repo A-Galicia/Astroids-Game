@@ -29,7 +29,7 @@ public:
 	sf::Vector2f vel;
 	float radius{};
 	AstSize size{AstSize::Large};
-	Asteroid(sf::Vector2f pos, sf::Vector2f v, AstSize s, float scale);
+	Asteroid(sf::Texture &tex, sf::Vector2f pos, sf::Vector2f v, AstSize s, float scale);
 	void Update(double deltaTime, sf::Vector2u win);
 	void Draw(sf::RenderWindow &window);
 	void Wrap(sf::Vector2u ws);

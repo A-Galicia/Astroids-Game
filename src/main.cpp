@@ -41,6 +41,7 @@ int main()
 	window.setFramerateLimit(60);
 
 	AsteroidsSystem asts;
+	asts.loadTexture("assets/Asteroid.png");
 	Player player;
 	player.Initilize();
 	player.Load();

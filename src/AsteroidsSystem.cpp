@@ -4,9 +4,10 @@
 #include <algorithm>
 
 AsteroidsSystem::AsteroidsSystem(){
-	if (!astTexture.loadFromFile("assets/Asteroid.png")){
-		std::cout << "Failed to load AstroidSystem texture" << std::endl;
-	}
+}
+
+bool AsteroidsSystem::loadTexture(const std::string &path) {
+	return asteroidTex.loadFromFile(path);
 }
 
 void AsteroidsSystem::SpawnWave(int count, sf::Vector2u ws, sf::Vector2f avoidPos = {-1.f, -1.f}, float avoidRadius = 150.f) {
@@ -36,7 +37,7 @@ void AsteroidsSystem::SpawnWave(int count, sf::Vector2u ws, sf::Vector2f avoidPo
 		//random direction & speed
 		sf::Vector2f dir = normalize({rng.frand(-1.f, 1.f), rng.frand(-1.f, 1.f)});
 		float speed = rng.frand(0.001f, 0.6f);
-		asts.emplace_back(pos, dir * speed, AstSize::Large, 1.0f);
+		asts.emplace_back(asteroidTex ,pos, dir * speed, AstSize::Large, 1.0f);
 	}
 }
 
@@ -54,6 +55,6 @@ void AsteroidsSystem::Split(size_t idx) {
 		float ang = rng.frand(0.f, 10.f);
 		sf::Vector2f dir (std::cos(ang), std::sin(ang));
 		float speed = std::min(1.f, baseSpeed * rng.frand(0.01f, 1.1f));
-		asts.emplace_back(a.sprite.getPosition(), dir * speed, childSize, childScale);
+		asts.emplace_back(asteroidTex ,a.sprite.getPosition(), dir * speed, childSize, childScale);
 	}
 }

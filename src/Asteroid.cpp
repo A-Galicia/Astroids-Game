@@ -11,15 +11,15 @@ int RNG::irand(int a, int b) {
 	return d(rng);
 }
 
-Asteroid::Asteroid (sf::Vector2f pos, sf::Vector2f v, AstSize s, float scale = 1.0f){
+Asteroid::Asteroid (sf::Texture &tex, sf::Vector2f pos, sf::Vector2f v, AstSize s, float scale = 1.0f){
 	vel = v;
 	size = s;
 
-	if (!texture.loadFromFile("assets/Asteroid.png")){
+	/* if (!texture.loadFromFile("assets/Asteroid.png")){
 		std::cout << "Astroid failed to load texture" << std::endl;
 		return;
-	}
-	sprite.setTexture(texture);
+	} */
+	sprite.setTexture(tex, true);
 	auto bounds = sprite.getLocalBounds();
 	sprite.setOrigin(bounds.width * 0.5f, bounds.height * 0.5f);
 	sprite.setPosition(pos);
