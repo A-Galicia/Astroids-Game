@@ -1,6 +1,7 @@
 
 #include "AsteroidsSystem.hpp"
 #include <iostream>
+#include <algorithm>
 
 AsteroidsSystem::AsteroidsSystem(){
 	if (!astTexture.loadFromFile("assets/Asteroid.png")){
@@ -34,7 +35,7 @@ void AsteroidsSystem::SpawnWave(int count, sf::Vector2u ws, sf::Vector2f avoidPo
 
 		//random direction & speed
 		sf::Vector2f dir = normalize({rng.frand(-1.f, 1.f), rng.frand(-1.f, 1.f)});
-		float speed = rng.frand(0.001f, 2.f);
+		float speed = rng.frand(0.001f, 0.6f);
 		asts.emplace_back(pos, dir * speed, AstSize::Large, 1.0f);
 	}
 }
@@ -47,12 +48,12 @@ void AsteroidsSystem::Split(size_t idx) {
 
 	AstSize childSize = (a.size == AstSize::Large) ? AstSize::Medium : AstSize::Small;
 	float childScale = (a.size == AstSize::Large) ? 0.6f: 0.4f;
-	float baseSpeed = std::max(90.f, std::sqrt(lenSqr(a.vel)) * 1.2f);
+	float baseSpeed = std::max(1.f, std::sqrt(lenSqr(a.vel)) * 1.2f);
 
 	for (int i = 0; i < 2; i++) {
 		float ang = rng.frand(0.f, 10.f);
 		sf::Vector2f dir (std::cos(ang), std::sin(ang));
-		float speed = baseSpeed * rng.frand(0.8f, 1.3f);
+		float speed = std::min(1.f, baseSpeed * rng.frand(0.01f, 1.1f));
 		asts.emplace_back(a.sprite.getPosition(), dir * speed, childSize, childScale);
 	}
 }

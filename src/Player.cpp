@@ -37,7 +37,7 @@ void Bullet::Draw(sf::RenderWindow& window){
 Player::Player() {
 	health = 5;
 	movementSpeed = .1;
-	maxFireRate = 500;
+	maxFireRate = 200;
 	fireRateTimer = 0;
 	rotSpeed = 0.3f;
 	thrust = 0.003f;

@@ -11,22 +11,11 @@ int RNG::irand(int a, int b) {
 	return d(rng);
 }
 
-/* static float RNG::lenSqr(sf::Vector2f v) { 
-	return v.x * v.x + v.y * v.y;
-}
-
-inline static sf::Vector2f RNG::normalize(sf::Vector2f v) {
-	float lSqr = lenSqr(v);
-	if (lSqr == 0.f) {
-		return {1.f, 0.f};
-	}
-
-	float inv = 1.f / std::sqrt(lSqr);
-	return {v.x * inv, v.y * inv};
-} */
-
 Asteroid::Asteroid (sf::Vector2f pos, sf::Vector2f v, AstSize s, float scale = 1.0f){
-	if (!texture.loadFromFile("assets/Astroid.png")){
+	vel = v;
+	size = s;
+
+	if (!texture.loadFromFile("assets/Asteroid.png")){
 		std::cout << "Astroid failed to load texture" << std::endl;
 		return;
 	}
@@ -35,7 +24,7 @@ Asteroid::Asteroid (sf::Vector2f pos, sf::Vector2f v, AstSize s, float scale = 1
 	sprite.setOrigin(bounds.width * 0.5f, bounds.height * 0.5f);
 	sprite.setPosition(pos);
 	sprite.setScale(scale, scale);
-	radius = 0.5f * bounds.height * scale;
+	radius = 0.5f * std::max(bounds.width, bounds.height) * sprite.getScale().x;
 }
 
 void Asteroid::Update(double deltaTime, sf::Vector2u win) {
@@ -48,10 +37,22 @@ void Asteroid::Draw (sf::RenderWindow &window) {
 }
 
 void Asteroid::Wrap(sf::Vector2u ws) {
-	sf::Vector2f p = sprite.getPosition();
-	if (p.x < -radius) p.x = ws.x + radius;
-	if (p.x > ws.x + radius) p.x = -radius;
-	if (p.y < -radius) p.y = ws.y + radius;
-	if (p.y > ws.y + radius) p.y = -radius;
-	sprite.setPosition(p);
+	const float r = radius;
+    sf::Vector2f p = sprite.getPosition();
+
+    if (p.x < -r){
+		p.x = ws.x + r;
+	}
+    else if (p.x > ws.x + r) {
+		p.x = -r;
+	}
+
+    if (p.y < -r){
+		p.y = ws.y + r;
+	}
+    else if (p.y > ws.y + r) {
+		p.y = -r;
+	}
+
+    sprite.setPosition(p);
 }

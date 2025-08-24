@@ -17,8 +17,6 @@ struct RNG {
 	std::mt19937 rng {std::random_device{}()};
 	float frand(float a, float b);
 	int irand(int a, int b);
-	/* inline static float lenSqr(sf::Vector2f v);
-	inline static sf::Vector2f normalize(sf::Vector2f v); */
 };
 
 enum class AstSize {Large, Medium, Small};

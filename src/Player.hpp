@@ -2,12 +2,10 @@
 #include <SFML/Graphics.hpp>
 #include <deque>
 
-class Bullet {
+struct Bullet {
 	sf::CircleShape bulletShape;
 	sf::Vector2f direction;
 	float speed;
-
-public:
 	float timeToLive;
 	Bullet();
 	void Initilize(const sf::Vector2f &origin, const sf::Vector2f &mousePosition);
@@ -22,7 +20,6 @@ private:
 	sf::CircleShape boundingCircle;
 	float movementSpeed;
 	int health;
-	std::deque<Bullet> bullets;
 	float maxFireRate;
 	double fireRateTimer;
 	sf::Vector2f velocity;
@@ -32,6 +29,7 @@ private:
 	float maxSpeed;
 	
 public:
+	std::deque<Bullet> bullets;
 	sf::Sprite sprite;
 	Player();
 	void Initilize();
