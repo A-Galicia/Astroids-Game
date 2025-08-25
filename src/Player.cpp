@@ -43,13 +43,14 @@ Player::Player() {
 	thrust = 0.003f;
 	damping = 0.001f;
 	maxSpeed = 0.5f;
+	radius = 22;
 }
 
 void Player::Initilize() {
 	boundingCircle.setFillColor(sf::Color::Transparent);
 	boundingCircle.setOutlineColor(sf::Color::Red);
 	boundingCircle.setOutlineThickness(1.0);
-	boundingCircle.setRadius(22);
+	boundingCircle.setRadius(radius);
 	boundingCircle.setOrigin(22, 22);
 }
 

@@ -22,15 +22,16 @@ private:
 	int health;
 	float maxFireRate;
 	double fireRateTimer;
-	sf::Vector2f velocity;
 	float rotSpeed;
 	float thrust;
 	float damping;
 	float maxSpeed;
 	
 public:
+	sf::Vector2f velocity;
 	std::deque<Bullet> bullets;
 	sf::Sprite sprite;
+	float radius;
 	Player();
 	void Initilize();
 	void Load();

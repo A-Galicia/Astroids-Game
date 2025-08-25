@@ -3,6 +3,15 @@
 #include <iostream>
 #include "Player.hpp"
 #include "AsteroidsSystem.hpp"
+#include "Instructions.hpp"
+
+// Globals ---------------------------------------------------
+
+//adds asteroids per level clear;
+int level = 1;
+bool death = false;
+
+//------------------------------------------------------------
 
 void handleBulletAsteroidHits(std::deque<Bullet>& bullets, AsteroidsSystem& sys, float bulletRadius) {
 	for (int i = bullets.size() - 1; i >= 0; i--) {
@@ -14,7 +23,7 @@ void handleBulletAsteroidHits(std::deque<Bullet>& bullets, AsteroidsSystem& sys,
 			float rr = (bulletRadius + sys.asts[j].radius);
 
 			if(lenSqr(ap - bp) <= rr * rr) {
-				hit == true;
+				hit = true;
 				sys.Split((size_t)j);
 				break;
 			}
@@ -27,11 +36,29 @@ void handleBulletAsteroidHits(std::deque<Bullet>& bullets, AsteroidsSystem& sys,
 	}
 }
 
+void handlePlayerAsteroidCollision(Player &player, AsteroidsSystem &sys) {
+	const sf::Vector2f playerPos = player.sprite.getPosition();
+	
+	for (int i = sys.asts.size() - 1; i >= 0; i--) {
+		const sf::Vector2f astPos = sys.asts[i].sprite.getPosition();
+		const float astRadius = sys.asts[i].radius;
+		const float totalRadius = astRadius + player.radius;
+
+		// Player is hit
+		if (lenSqr(astPos - playerPos) <= totalRadius * totalRadius) {
+			//return true;
+			death = true;
+
+		
+		}
+
+	}
+	//return false;
+}
+
 int main()
 {
-	//adds asteroids per level clear;
-	int level = 1;
-
+	
 	// initilization
 	sf::ContextSettings settings;
 	settings.antialiasingLevel = 8;
@@ -43,8 +70,10 @@ int main()
 	AsteroidsSystem asts;
 	asts.loadTexture("assets/Asteroid.png");
 	Player player;
-	player.Initilize();
+	//player.Initilize();
 	player.Load();
+	Instructions levelText;
+	
 	
 	sf::Clock clock;
 
@@ -81,9 +110,28 @@ int main()
 			// level cleared, add 1 asteroid to next level
 			if (asts.asts.empty()) {
 				asts.SpawnWave(level + 1, window.getSize(), player.sprite.getPosition(), 200.f);
+				std::cout << "added level: " << level << "\n";
+				level += 1;
 			}
 
 			handleBulletAsteroidHits(player.bullets, asts, bulletRadius);
+			/*
+			if (handlePlayerAsteroidCollision(player, asts)) {
+				asts.asts.clear();
+				level = 0;
+				std::cout << "Player is hit" << "\n";
+			}*/
+
+			handlePlayerAsteroidCollision(player, asts);
+
+			if (death) {
+				asts.asts.clear();
+				level = 0;
+				death = false;
+				std::cout << "Player died" << "\n";
+			}
+
+			levelText.Update(level);
 
 			// Update -----------------------------------------------
 			
@@ -94,6 +142,7 @@ int main()
 			for (auto& a : asts.asts) {
 				a.Draw(window);
 			}
+			levelText.Draw(window);
 			window.display();
 		
 	}
