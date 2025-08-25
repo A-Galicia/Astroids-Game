@@ -14,6 +14,12 @@ void Instructions::Update(int level){
 	text.setString("Level: " + std::to_string(level));
 }
 
-void Instructions::Draw(sf::RenderWindow &window){
+void Instructions::WriteText(std::string writtenText) {
+	text.setString(writtenText);
+}
+
+void Instructions::Draw(sf::Vector2f pos, sf::RenderWindow &window){
+	text.setPosition(pos);
 	window.draw(text);
 }
+

@@ -7,5 +7,6 @@ class Instructions {
 public:
 	Instructions();
 	void Update(int level);
-	void Draw(sf::RenderWindow &window);
+	void WriteText(std::string writtenText);
+	void Draw(sf::Vector2f pos, sf::RenderWindow &window);
 };

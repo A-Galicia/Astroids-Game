@@ -69,7 +69,9 @@ int main()
 	//player.Initilize();
 	player.Load();
 	Instructions levelText;
-	
+
+	Instructions instruct;
+	instruct.WriteText("Controls\n W: forward, A: rotate left, D: rotate right, Spacebar: shoot\t\t Touching asteroids will reset the level!");
 	
 	sf::Clock clock;
 
@@ -128,7 +130,8 @@ int main()
 			for (auto& a : asts.asts) {
 				a.Draw(window);
 			}
-			levelText.Draw(window);
+			levelText.Draw({10, window.getSize().y + 20}, window);
+			instruct.Draw({200, window.getSize().y + 20}, window);
 			window.display();
 		
 	}
