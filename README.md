@@ -1,15 +1,14 @@
-# SFML Asteroids 🚀
+# Asteroids 🚀
 
 A tiny **Asteroids-style** game in **C++17** with **SFML 2.5**.  
 Rotate and thrust your ship, blast rocks that split into smaller ones, and survive wave after wave.
 
-![Asteroids Game Screenshot](assets/AsteroidsScreenshot.png)
+![Asteroids Game Screenshot](assets/AsteroidsScreenShot.png)
 
 <p>
   <a href="https://en.cppreference.com/"><img alt="C++17" src="https://img.shields.io/badge/C%2B%2B-17-00599C.svg?logo=c%2B%2B&logoColor=white"></a>
   <a href="https://www.sfml-dev.org/"><img alt="SFML" src="https://img.shields.io/badge/SFML-2.6-8CC445.svg"></a>
   <img alt="Build" src="https://img.shields.io/badge/build-CMake-blue.svg">
-  <img alt="License" src="https://img.shields.io/badge/license-MIT-lightgrey.svg">
 </p>
 
 ---
