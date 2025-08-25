@@ -36,7 +36,7 @@ void AsteroidsSystem::SpawnWave(int count, sf::Vector2u ws, sf::Vector2f avoidPo
 
 		//random direction & speed
 		sf::Vector2f dir = normalize({rng.frand(-1.f, 1.f), rng.frand(-1.f, 1.f)});
-		float speed = rng.frand(0.001f, 0.6f);
+		float speed = rng.frand(0.001f, 0.3f);
 		asts.emplace_back(asteroidTex ,pos, dir * speed, AstSize::Large, 1.0f);
 	}
 }
@@ -54,7 +54,7 @@ void AsteroidsSystem::Split(size_t idx) {
 	for (int i = 0; i < 2; i++) {
 		float ang = rng.frand(0.f, 10.f);
 		sf::Vector2f dir (std::cos(ang), std::sin(ang));
-		float speed = std::min(1.f, baseSpeed * rng.frand(0.01f, 1.1f));
+		float speed = std::min(0.6f, baseSpeed * rng.frand(0.01f, 1.1f));
 		asts.emplace_back(asteroidTex ,a.sprite.getPosition(), dir * speed, childSize, childScale);
 	}
 }
