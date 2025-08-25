@@ -10,6 +10,7 @@ set(SOURCES
     src/Player.cpp
     src/Asteroid.cpp
     src/AsteroidsSystem.cpp
+    src/Instructions.cpp
 )
 
 # Find SFML
